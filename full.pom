@@ -24,7 +24,7 @@ let eight_bit_number = (
 );
 
 let zero_one_decimal = (
-    # 0.0 - 0.99
+  # 0.0 - 0.99
   ("0"+)? decimal_end?
   |
   # 1 1.0
