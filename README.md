@@ -42,6 +42,6 @@ Just filter out the undefined values and you'll have an array of the values you 
 "rgb(255, 255, 255)".match(regex).filter((item) => item != null)
 ```
 
-# Why?
+## Why?
 
 For fun and to demonstrate Pomsky's power of making complex regular expressions that are still readable.
