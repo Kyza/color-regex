@@ -1,0 +1,94 @@
+let x = [ascii_xdigit];
+
+let decimal_end = ("." ["0"-"9"]+);
+let zero_decimal_end = ("." "0"+);
+
+let eight_bit_number = (
+  # Hundreds
+  (
+    "1" ["0"-"9"] ["0"-"9"] decimal_end?
+    |
+    # Two hundreds max out at 255
+    "2" (
+      ["0"-"4"] ["0"-"9"] decimal_end?
+      |
+      "5" ["0"-"5"] zero_decimal_end?
+    )
+  )
+  |
+  # Tens
+  ["1"-"9"] ["0"-"9"] decimal_end?
+  |
+  # Ones
+  ["0"-"9"] decimal_end?
+);
+
+let zero_one_decimal = (
+    # 0.0 - 0.99
+  ("0"+)? decimal_end?
+  |
+  # 1 1.0
+  "1" zero_decimal_end?
+);
+
+let percent_number = (
+  # 0% - 100%
+  (
+    # Hundreds
+    "100" zero_decimal_end?
+    |
+    (
+      # Tens
+      ["1"-"9"] ["0"-"9"]
+      |
+      # Ones
+      ["0"-"9"]
+    ) decimal_end?
+  ) "%"
+);
+
+let comma_sep = [s]* "," [s]*;
+let slash_sep = [s]* "/" [s]*;
+
+(
+  # Hex
+  :("#") (
+    # 6 and 8 long
+    :(x{2}) :(x{2}) :(x{2}) :(x{2})?
+    |
+    # 3 and 4 long
+    :(x{1}) :(x{1}) :(x{1}) :(x{1})?
+  )
+  |
+  # RGBA
+  :("rgb" | "rgba") "(" (
+    # Percents and 8bit can't be mixed
+    (
+      # Commas and no commas, choose
+      # rgb(255, 255, 255, 1)
+      (
+        [s]* :(eight_bit_number) comma_sep :(eight_bit_number) comma_sep :(eight_bit_number) (comma_sep :(zero_one_decimal | percent_number))? [s]*
+        |
+        [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) ([s]+ :(zero_one_decimal | percent_number))? [s]*
+      )
+      |
+      # Commas and no commas, choose
+      # rgb(100%, 100%, 100%, 1)
+      (
+        [s]* :(percent_number) comma_sep :(percent_number) comma_sep :(percent_number) (comma_sep :(zero_one_decimal | percent_number))? [s]*
+        |
+        [s]* :(percent_number) [s]+ :(percent_number) [s]+ :(percent_number) ([s]+ :(zero_one_decimal | percent_number))? [s]*
+      )
+      |
+      # At least one space required
+      # Commas can't be used here
+      # rgb(255 255 255 / 1)
+      [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) (slash_sep :(zero_one_decimal | percent_number))? [s]*
+      |
+      # At least one space required
+      # Commas can't be used here
+      # rgb(100% 100% 100% / 1)
+      [s]* :(percent_number) [s]+ :(percent_number) [s]+ :(percent_number) (slash_sep :(zero_one_decimal | percent_number))? [s]*
+    )
+  ) ")"
+)
