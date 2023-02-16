@@ -24,7 +24,7 @@ Written in [Pomsky](https://pomsky-lang.org).
 - [ ] COLOR
 - [ ] HSL
 - [ ] HSV
-- [ ] HWL
+- [ ] HWB
 - [ ] LCH
 - [ ] OKLCH
   
