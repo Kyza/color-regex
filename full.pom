@@ -4,23 +4,10 @@ let decimal_end = ("." ["0"-"9"]+);
 let zero_decimal_end = ("." "0"+);
 
 let eight_bit_number = (
-  # Hundreds
-  (
-    "1" ["0"-"9"] ["0"-"9"] decimal_end?
-    |
-    # Two hundreds max out at 255
-    "2" (
-      ["0"-"4"] ["0"-"9"] decimal_end?
-      |
-      "5" ["0"-"5"] zero_decimal_end?
-    )
-  )
+  # 0.0 - 255.0
+  range "0"-"254" decimal_end?
   |
-  # Tens
-  ["1"-"9"] ["0"-"9"] decimal_end?
-  |
-  # Ones
-  ["0"-"9"] decimal_end?
+  "255" zero_decimal_end?
 );
 
 let zero_one_decimal = (
@@ -32,23 +19,16 @@ let zero_one_decimal = (
 );
 
 let percent_number = (
-  # 0% - 100%
+  # 0.0% - 100.0%
   (
-    # Hundreds
-    "100" zero_decimal_end?
+    range "0"-"99" decimal_end?
     |
-    (
-      # Tens
-      ["1"-"9"] ["0"-"9"]
-      |
-      # Ones
-      ["0"-"9"]
-    ) decimal_end?
+    "100" zero_decimal_end?
   ) "%"
 );
 
 let comma_sep = [s]* "," [s]*;
-let slash_sep = [s]* "/" [s]*;
+let slash_sep = [s]* (regex "\\/") [s]*;
 
 (
   # Hex
