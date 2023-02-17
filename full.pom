@@ -53,20 +53,20 @@ let slash_sep = [s]* (regex "\\/") [s]*;
   :("rgb" | "rgba") "(" (
     # Percents and 8bit can't be mixed
     (
-      # Commas and no commas, choose
       # rgb(255, 255, 255, 1)
       (
+        # Commas required if using alpha
         [s]* :(eight_bit_number) comma_sep :(eight_bit_number) comma_sep :(eight_bit_number) (comma_sep :(zero_one_decimal | percent_number))? [s]*
         |
-        [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) ([s]+ :(zero_one_decimal | percent_number))? [s]*
+        [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) [s]*
       )
       |
-      # Commas and no commas, choose
       # rgb(100%, 100%, 100%, 1)
       (
+        # Commas required if using alpha
         [s]* :(percent_number) comma_sep :(percent_number) comma_sep :(percent_number) (comma_sep :(zero_one_decimal | percent_number))? [s]*
         |
-        [s]* :(percent_number) [s]+ :(percent_number) [s]+ :(percent_number) ([s]+ :(zero_one_decimal | percent_number))? [s]*
+        [s]* :(percent_number) [s]+ :(percent_number) [s]+ :(percent_number) [s]*
       )
       |
       # At least one space required
