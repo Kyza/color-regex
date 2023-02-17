@@ -8,6 +8,9 @@ let eight_bit_number = (
   range "0"-"254" decimal_end?
   |
   "255" zero_decimal_end?
+  |
+  # .0
+  decimal_end
 );
 
 let zero_one_decimal = (
@@ -16,6 +19,9 @@ let zero_one_decimal = (
   |
   # 1 1.0
   "1" zero_decimal_end?
+  |
+  # .0
+  decimal_end
 );
 
 let percent_number = (
@@ -24,6 +30,9 @@ let percent_number = (
     range "0"-"99" decimal_end?
     |
     "100" zero_decimal_end?
+    |
+    # .0
+    decimal_end
   ) "%"
 );
 
