@@ -14,7 +14,7 @@ Written in [Pomsky](https://pomsky-lang.org).
   - [x] `#FFFF` 4 length
   - [x] `#FFFFFF` 6 length
   - [x] `#FFFFFFFF` 8 length
-- [x] RGBA
+- [x] RGB / RGBA
   - [x] `rgb()` and `rgba()` work the same
   - [x] `rgb(255, 255, 255)`
   - [x] `rgb(255 255 255)`
@@ -22,10 +22,11 @@ Written in [Pomsky](https://pomsky-lang.org).
   - [x] `rgb(255 255 255 / 1)`
   - [x] `rgb(100%, 100%, 100%, 100%)`
 - [ ] COLOR
-- [ ] HSL
-- [ ] HSV
+- [ ] HSL / HSLA
 - [ ] HWB
+- [ ] LAB
 - [ ] LCH
+- [ ] OKLAB
 - [ ] OKLCH
   
 ## Playground
