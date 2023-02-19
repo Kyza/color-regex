@@ -21,6 +21,7 @@ Written in [Pomsky](https://pomsky-lang.org).
   - [x] `rgb(255, 255, 255, 1)`
   - [x] `rgb(255 255 255 / 1)`
   - [x] `rgb(100%, 100%, 100%, 100%)`
+  - [ ] `rgb(255 255, 255)`
 - [ ] COLOR
 - [ ] HSL / HSLA
 - [ ] HWB
@@ -36,7 +37,7 @@ Written in [Pomsky](https://pomsky-lang.org).
 
 ## Usage
 
-It always matches `[3-4]` unnamed groups. Those groups are the color type, then the color values. The rest will be undefined.
+It always matches `{3,4}` unnamed groups. Those groups are the color type, then the color values. The rest will be undefined.
 
 Just filter out the undefined values and you'll have an array of the values you want.
 
