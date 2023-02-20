@@ -18,10 +18,11 @@ Written in [Pomsky](https://pomsky-lang.org).
   - [x] `rgb()` and `rgba()` work the same
   - [x] `rgb(255, 255, 255)`
   - [x] `rgb(255 255 255)`
+  - [ ] `rgb(255 255, 255)`
+    - I am not adding support for this one. I don't even know why it's valid.
   - [x] `rgb(255, 255, 255, 1)`
   - [x] `rgb(255 255 255 / 1)`
   - [x] `rgb(100%, 100%, 100%, 100%)`
-  - [ ] `rgb(255 255, 255)`
 - [ ] COLOR
 - [ ] HSL / HSLA
 - [ ] HWB
