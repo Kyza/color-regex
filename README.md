@@ -35,9 +35,13 @@ Written in [Pomsky](https://pomsky-lang.org).
 
 <BlockComponent
 block={{
-  "type": "file",
-  "id": "pomsky-viewer",
-  "entry": "blocks/example-file-block/index.tsx",
+	"type": "file",
+	"id": "pomsky-viewer",
+	"title": "Pomsky Viewer",
+	"description": "View the compiled result of the Pomsky code.",
+	"entry": "blocks/pomsky-block/index.tsx",
+	"matches": ["*.pom", "*.pomsky"],
+	"example_path": "https://github.com/Kyza/color-regex/blob/main/full.pom"
 }}
 context={{"repo":"color-regex","owner":"Kyza","path":"full.pom","sha":"master","file":"README.md"}}
 height={500}
