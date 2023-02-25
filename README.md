@@ -37,6 +37,7 @@ Written in [Pomsky](https://pomsky-lang.org).
 block={{
   "type": "file",
   "id": "pomsky-viewer",
+  "entry": "blocks/example-file-block/index.tsx",
 }}
 context={{"repo":"color-regex","owner":"Kyza","path":"full.pom","sha":"master","file":"README.md"}}
 height={500}
