@@ -43,7 +43,7 @@ block={{
   "matches": ["*.pom", "*.pomsky"],
   "example_path": "https://github.com/Kyza/color-regex/blob/main/full.pom"
 }}
-context={{"repo":"color-regex","owner":"Kyza","path":"full.pom","sha":"master","file":"full.pom"}}
+context={{"repo":"color-regex","owner":"Kyza","path":"full.pom","sha":"master","file":"README.md"}}
 height={500}
 />
   
