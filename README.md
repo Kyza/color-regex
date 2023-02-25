@@ -34,7 +34,7 @@ Written in [Pomsky](https://pomsky-lang.org).
 ## Blocks Example
 
 <BlockComponent
-block={{"owner":"Kyza","repo":"blocks","id":"pomsky-block","type":"file"}}
+block={{"owner":"Kyza","repo":"blocks","id":"pomsky-viewer","type":"file"}}
 context={{"owner":"Kyza","repo":"color-regex","path":"full.pom","sha":"master","file":"README.md"}}
 height={500}
 />
