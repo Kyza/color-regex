@@ -30,6 +30,22 @@ Written in [Pomsky](https://pomsky-lang.org).
 - [ ] LCH
 - [ ] OKLAB
 - [ ] OKLCH
+
+## Blocks Example
+
+<BlockComponent
+block={{
+  "type": "file",
+  "id": "pomsky-viewer",
+  "title": "Pomsky Viewer",
+  "description": "View the compiled result of the Pomsky code.",
+  "entry": "blocks/example-file-block/index.tsx",
+  "matches": ["*.pom", "*.pomsky"],
+  "example_path": "https://github.com/Kyza/color-regex/blob/main/full.pom"
+}}
+context={{"repo":"color-regex","owner":"Kyza","path":"full.pom","sha":"master","file":"full.pom"}}
+height={500}
+/>
   
 ## Playground
 
