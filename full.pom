@@ -7,6 +7,7 @@ let number = "-"? ["0"-"9"]+ decimal_end?;
 let rotation_number_keyword = ("deg" | "rad" | "grad" | "turn");
 
 let eight_bit_number = (
+  "0"*
   # 0.0 - 255.0
   range "0"-"254" decimal_end?
   |
@@ -17,6 +18,7 @@ let eight_bit_number = (
 );
 
 let zero_one_number = (
+  "0"*
   # 0.0 - 0.99
   ("0"+)? decimal_end?
   |
@@ -35,6 +37,7 @@ let zero_hundred_number = (
 );
 
 let percentage = (
+  "0"*
   # 0.0% - 100.0%
   (
     range "0"-"99" decimal_end?
@@ -54,128 +57,158 @@ let comma_sep = [s]* "," [s]*;
 let slash_sep = [s]* (regex "\\/") [s]*;
 
 
-# HWB
-# hwb() = hwb( [<hue> | none] [<percentage> | none] [<percentage> | none] [ / [<alpha-value> | none] ]? )
-
-let hwb_hue = hue_number;
-let hwb_whiteness = percentage;
-let hwb_blackness = percentage;
-let hwb_alpha = alpha_number;
-
-
-# LAB / OKLAB
-# https://w3c.github.io/csswg-drafts/css-color/#funcdef-lab
-# lab() = lab( [<percentage> | <number> | none]
-#       [ <percentage> | <number> | none]
-#       [ <percentage> | <number> | none]
-#       [ / [<alpha-value> | none] ]? )
-# Percentages	Allowed for L, a and b
-# Percent reference range 	for L: 0% = 0.0, 100% = 100.0
-# for a and b: -100% = -125, 100% = 125
-
-let lab_lightness = percentage | zero_hundred_number;
-let lab_astar = "-"? (percentage | ((range "0"-"124" decimal_end?) | "125" zero_decimal_end?));
-let lab_bstar = lab_astar;
-let lab_alpha = alpha_number;
-
-
-# LCH / OKLCH
-# https://w3c.github.io/csswg-drafts/css-color/#funcdef-lch
-# lch() = lch( [<percentage> | <number> | none]
-#       [ <percentage> | <number> | none]
-#       [ <hue> | none]
-#       [ / [<alpha-value> | none] ]? )
-# Percentages	Allowed for L and C
-# Percent reference range 	for L: 0% = 0.0, 100% = 100.0
-# for C: 0% = 0, 100% = 150
-
-let lch_lightness = percentage | zero_hundred_number;
-let lch_chroma = percentage | ((range "0"-"149" decimal_end?) | "150" zero_decimal_end?);
-let lch_hue = hue_number;
-let lch_alpha = alpha_number;
-
-
 (
-  # Hex
-  # https://w3c.github.io/csswg-drafts/css-color/#hex-color
-  :("#") (
-    # 6 and 8 long
-    :(x{2}) :(x{2}) :(x{2}) :(x{2})?
-    |
-    # 3 and 4 long
-    :(x{1}) :(x{1}) :(x{1}) :(x{1})?
+  (
+    # Hexadecimal
+    # https://w3c.github.io/csswg-drafts/css-color/#hex-color
+
+    :("#") (
+      # 6 and 8 long
+      :(x{2}) :(x{2}) :(x{2}) :(x{2})?
+      |
+      # 3 and 4 long
+      :(x) :(x) :(x) :(x)?
+    )
   )
   |
-  # RGBA
-  # https://w3c.github.io/csswg-drafts/css-color/#rgb-functions
-  :("rgb" | "rgba") "(" (
-    # Percents and 8bit can't be mixed
-    (
-      # rgb(255, 255, 255, 1)
+  (
+    # RGBA
+    # https://w3c.github.io/csswg-drafts/css-color/#rgb-functions
+    # rgb() = [ <legacy-rgb-syntax> | <modern-rgb-syntax> ] 
+    # rgba() = [ <legacy-rgba-syntax> | <modern-rgba-syntax> ] 
+    # <legacy-rgb-syntax> =   rgb( <percentage>#{3} , <alpha-value>? ) |
+    #                   rgb( <number>#{3} , <alpha-value>? )
+    # <legacy-rgba-syntax> = rgba( <percentage>#{3} , <alpha-value>? ) |
+    #                   rgba( <number>#{3} , <alpha-value>? )
+    # <modern-rgb-syntax> = rgb( 
+    #   [ <number> | <percentage> | none]{3} 
+    #   [ / [<alpha-value> | none] ]?  )
+    # <modern-rgba-syntax> = rgba( 
+    #   [ <number> | <percentage> | none]{3} 
+    #   [ / [<alpha-value> | none] ]?  )
+
+    :("rgb" | "rgba") "(" (
       (
-        # Commas required if using alpha
-        [s]* :(eight_bit_number) comma_sep :(eight_bit_number) comma_sep :(eight_bit_number) (comma_sep :(zero_one_number | percentage))? [s]*
+        # <legacy-rgb-syntax>
+        (
+          [s]* :(eight_bit_number) comma_sep :(eight_bit_number) comma_sep :(eight_bit_number) (comma_sep :(alpha_number))? [s]*
+          |
+          [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) [s]*
+        )
         |
-        [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) [s]*
+        (
+          [s]* :(percentage) comma_sep :(percentage) comma_sep :(percentage) (comma_sep :(alpha_number))? [s]*
+          |
+          [s]* :(percentage) [s]+ :(percentage) [s]+ :(percentage) [s]*
+        )
+        |
+        # <modern-rgb-syntax>
+        [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) (slash_sep :(alpha_number))? [s]*
+        |
+        [s]* :(percentage) [s]+ :(percentage) [s]+ :(percentage) (slash_sep :(alpha_number))? [s]*
       )
-      |
-      # rgb(100%, 100%, 100%, 1)
+    ) ")"
+  )
+  |
+  (
+    # HSL / HSLA
+    # https://w3c.github.io/csswg-drafts/css-color/#the-hsl-notation
+    # hsl() = [ <legacy-hsl-syntax> | <modern-hsl-syntax> ]
+    # hsla() = [ <legacy-hsla-syntax> | <modern-hsla-syntax> ]
+    # <modern-hsl-syntax> = hsl(
+    #     [<hue> | none]
+    #     [<percentage> | <number> | none]
+    #     [<percentage> | <number> | none]
+    #     [ / [<alpha-value> | none] ]? )
+    # <modern-hsla-syntax> = hsla(
+    #     [<hue> | none]
+    #     [<percentage> | <number> | none]
+    #     [<percentage> | <number> | none]
+    #     [ / [<alpha-value> | none] ]? )
+    # <legacy-hsl-syntax> = hsl( <hue>, <percentage>, <percentage>, <alpha-value>? )
+    # <legacy-hsla-syntax> = hsla( <hue>, <percentage>, <percentage>, <alpha-value>? )
+
+    let hsl_hue = hue_number;
+    let hsl_saturation = percentage;
+    let hsl_lightness = percentage;
+    let hsl_alpha = alpha_number;
+
+    :("hsl" | "hsla") "(" (
       (
-        # Commas required if using alpha
-        [s]* :(percentage) comma_sep :(percentage) comma_sep :(percentage) (comma_sep :(zero_one_number | percentage))? [s]*
+        # <modern-hsl-syntax>
+        [s]* :(hsl_hue) [s]+ :(hsl_saturation) [s]+ :(hsl_lightness) (slash_sep :(hsl_alpha))? [s]*
         |
-        [s]* :(percentage) [s]+ :(percentage) [s]+ :(percentage) [s]*
+        # <legacy-hsl-syntax>
+        (
+          [s]* :(hsl_hue) comma_sep :(hsl_saturation) comma_sep :(hsl_lightness) (comma_sep :(hsl_alpha))? [s]*
+          |
+          [s]* :(hsl_hue) [s]+ :(hsl_saturation) [s]+ :(hsl_lightness) [s]*
+        )
       )
-      |
-      # At least one space required
-      # Commas can't be used here
-      # rgb(255 255 255 / 1)
-      [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) (slash_sep :(zero_one_number | percentage))? [s]*
-      |
-      # At least one space required
-      # Commas can't be used here
-      # rgb(100% 100% 100% / 1)
-      [s]* :(percentage) [s]+ :(percentage) [s]+ :(percentage) (slash_sep :(zero_one_number | percentage))? [s]*
-    )
-  ) ")"
+    ) ")"
+  )
   |
-  # https://w3c.github.io/csswg-drafts/css-color/#the-hsl-notation
-  :("hsl" | "hsla") "(" (
-    (
-      # hsl(360, 100%, 100%, 1)
+  (
+    # HWB
+    # https://w3c.github.io/csswg-drafts/css-color/#the-hwb-notation
+    # hwb() = hwb( [<hue> | none] [<percentage> | none] [<percentage> | none] [ / [<alpha-value> | none] ]? )
+
+    let hwb_hue = hue_number;
+    let hwb_whiteness = percentage;
+    let hwb_blackness = percentage;
+    let hwb_alpha = alpha_number;
+    let hsl_alpha = alpha_number;
+
+    :("hwb") "(" (
       (
-        # Commas required if using alpha
-        [s]* :(number) rotation_number_keyword? comma_sep :(percentage) comma_sep :(percentage) (comma_sep :(zero_one_number | percentage))? [s]*
-        |
-        [s]* :(number) rotation_number_keyword? [s]+ :(percentage) [s]+ :(percentage) [s]*
+        [s]* :(hwb_hue) [s]+ :(hwb_whiteness) [s]+ :(hwb_blackness) ((slash_sep :(hwb_alpha))? [s]*)?
       )
-      |
-      # At least one space required
-      # Commas can't be used here
-      # hsl(360 100% 100% / 1)
-      [s]* :(number) rotation_number_keyword? [s]+ :(percentage) [s]+ :(percentage) (slash_sep :(zero_one_number | percentage))? [s]*
-    )
-  ) ")"
+    ) ")"
+  )
   |
-  # https://w3c.github.io/csswg-drafts/css-color/#funcdef-hwb
-  :("hwb") "(" (
-    # Commas can't be used here
-    (
-      [s]* :(hwb_hue) [s]+ :(hwb_whiteness) [s]+ :(hwb_blackness) ((slash_sep :(hwb_alpha))? [s]*)?
-    )
-  ) ")"
+  (
+    # LAB / OKLAB
+    # https://w3c.github.io/csswg-drafts/css-color/#specifying-lab-lch
+    # lab() = lab( [<percentage> | <number> | none]
+    #       [ <percentage> | <number> | none]
+    #       [ <percentage> | <number> | none]
+    #       [ / [<alpha-value> | none] ]? )
+    # Percentages	Allowed for L, a and b
+    # Percent reference range 	for L: 0% = 0.0, 100% = 100.0
+    # for a and b: -100% = -125, 100% = 125
+
+    let lab_lightness = percentage | zero_hundred_number;
+    let lab_astar = "-"? (percentage | ((range "0"-"124" decimal_end?) | "125" zero_decimal_end?));
+    let lab_bstar = lab_astar;
+    let lab_alpha = alpha_number;
+
+    :("lab" | "oklab") "(" (
+      (
+        [s]* :(lab_lightness) [s]+ :(lab_astar) [s]+ :(lab_bstar) [s]* ((slash_sep :(lab_alpha))? [s]*)?
+      )
+    ) ")"
+  )
   |
-  :("lab" | "oklab") "(" (
-    # Commas can't be used here
-    (
-      [s]* :(lab_lightness) [s]+ :(lab_astar) [s]+ :(lab_bstar) [s]* ((slash_sep :(lab_alpha))? [s]*)?
-    )
-  ) ")"
-  |
-  :("lch" | "oklch") "(" (
-    # Commas can't be used here
-    (
-      [s]* :(lch_lightness) [s]+ :(lch_chroma) [s]+ :(lch_hue) [s]* ((slash_sep :(lch_alpha))? [s]*)?
-    )
-  ) ")"
+  (
+    # LCH / OKLCH
+    # https://w3c.github.io/csswg-drafts/css-color/#specifying-lab-lch
+    # lch() = lch( [<percentage> | <number> | none]
+    #       [ <percentage> | <number> | none]
+    #       [ <hue> | none]
+    #       [ / [<alpha-value> | none] ]? )
+    # Percentages	Allowed for L and C
+    # Percent reference range 	for L: 0% = 0.0, 100% = 100.0
+    # for C: 0% = 0, 100% = 150
+
+    let lch_lightness = percentage | zero_hundred_number;
+    let lch_chroma = percentage | ((range "0"-"149" decimal_end?) | "150" zero_decimal_end?);
+    let lch_hue = hue_number;
+    let lch_alpha = alpha_number;
+
+    :("lch" | "oklch") "(" (
+      (
+      	[s]* :(lch_lightness) [s]+ :(lch_chroma) [s]+ :(lch_hue) [s]* ((slash_sep :(lch_alpha))? [s]*)?
+      )
+    ) ")"
+  )
 )
