@@ -2,8 +2,12 @@ let x = [ascii_xdigit];
 
 let decimal_end = ("." ["0"-"9"]+);
 let zero_decimal_end = ("." "0"+);
+let number = "-"? ["0"-"9"]+ decimal_end?;
+
+let rotation_number_keyword = ("deg" | "rad" | "grad" | "turn");
 
 let eight_bit_number = (
+  "-"?
   # 0.0 - 255.0
   range "0"-"254" decimal_end?
   |
@@ -24,7 +28,8 @@ let zero_one_decimal = (
   decimal_end
 );
 
-let percent_number = (
+let percentage = (
+  "-"?
   # 0.0% - 100.0%
   (
     range "0"-"99" decimal_end?
@@ -41,6 +46,7 @@ let slash_sep = [s]* (regex "\\/") [s]*;
 
 (
   # Hex
+  # https://w3c.github.io/csswg-drafts/css-color/#hex-color
   :("#") (
     # 6 and 8 long
     :(x{2}) :(x{2}) :(x{2}) :(x{2})?
@@ -50,13 +56,14 @@ let slash_sep = [s]* (regex "\\/") [s]*;
   )
   |
   # RGBA
+  # https://w3c.github.io/csswg-drafts/css-color/#rgb-functions
   :("rgb" | "rgba") "(" (
     # Percents and 8bit can't be mixed
     (
       # rgb(255, 255, 255, 1)
       (
         # Commas required if using alpha
-        [s]* :(eight_bit_number) comma_sep :(eight_bit_number) comma_sep :(eight_bit_number) (comma_sep :(zero_one_decimal | percent_number))? [s]*
+        [s]* :(eight_bit_number) comma_sep :(eight_bit_number) comma_sep :(eight_bit_number) (comma_sep :(zero_one_decimal | percentage))? [s]*
         |
         [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) [s]*
       )
@@ -64,20 +71,62 @@ let slash_sep = [s]* (regex "\\/") [s]*;
       # rgb(100%, 100%, 100%, 1)
       (
         # Commas required if using alpha
-        [s]* :(percent_number) comma_sep :(percent_number) comma_sep :(percent_number) (comma_sep :(zero_one_decimal | percent_number))? [s]*
+        [s]* :(percentage) comma_sep :(percentage) comma_sep :(percentage) (comma_sep :(zero_one_decimal | percentage))? [s]*
         |
-        [s]* :(percent_number) [s]+ :(percent_number) [s]+ :(percent_number) [s]*
+        [s]* :(percentage) [s]+ :(percentage) [s]+ :(percentage) [s]*
       )
       |
       # At least one space required
       # Commas can't be used here
       # rgb(255 255 255 / 1)
-      [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) (slash_sep :(zero_one_decimal | percent_number))? [s]*
+      [s]* :(eight_bit_number) [s]+ :(eight_bit_number) [s]+ :(eight_bit_number) (slash_sep :(zero_one_decimal | percentage))? [s]*
       |
       # At least one space required
       # Commas can't be used here
       # rgb(100% 100% 100% / 1)
-      [s]* :(percent_number) [s]+ :(percent_number) [s]+ :(percent_number) (slash_sep :(zero_one_decimal | percent_number))? [s]*
+      [s]* :(percentage) [s]+ :(percentage) [s]+ :(percentage) (slash_sep :(zero_one_decimal | percentage))? [s]*
+    )
+  ) ")"
+  |
+  # https://w3c.github.io/csswg-drafts/css-color/#the-hsl-notation
+  :("hsl" | "hsla") "(" (
+    (
+      # hsl(360, 100%, 100%, 1)
+      (
+        # Commas required if using alpha
+        [s]* :(number) rotation_number_keyword? comma_sep :(percentage) comma_sep :(percentage) (comma_sep :(zero_one_decimal | percentage))? [s]*
+        |
+        [s]* :(number) rotation_number_keyword? [s]+ :(percentage) [s]+ :(percentage) [s]*
+      )
+      |
+      # At least one space required
+      # Commas can't be used here
+      # hsl(360 100% 100% / 1)
+      [s]* :(number) rotation_number_keyword? [s]+ :(percentage) [s]+ :(percentage) (slash_sep :(zero_one_decimal | percentage))? [s]*
+    )
+  ) ")"
+  |
+  # https://w3c.github.io/csswg-drafts/css-color/#funcdef-hwb
+  :("hwb") "(" (
+    # Commas can't be used here
+    (
+      [s]* :(number) rotation_number_keyword? [s]+ :(percentage) [s]+ :(percentage) ((slash_sep :(zero_one_decimal | percentage))? [s]*)?
+    )
+  ) ")"
+  |
+  # https://w3c.github.io/csswg-drafts/css-color/#funcdef-lab
+  :("lab" | "oklab") "(" (
+    # Commas can't be used here
+    (
+      [s]* :(percentage | number) [s]+ :(percentage | number) [s]+ :(percentage | number) rotation_number_keyword? [s]* ((slash_sep :(percentage | number))? [s]*)?
+    )
+  ) ")"
+  |
+  # https://w3c.github.io/csswg-drafts/css-color/#funcdef-lch
+  :("lch" | "oklch") "(" (
+    # Commas can't be used here
+    (
+      [s]* :(percentage | number) [s]+ :(percentage | number) [s]+ :(number) rotation_number_keyword? [s]* ((slash_sep :(percentage | number))? [s]*)?
     )
   ) ")"
 )

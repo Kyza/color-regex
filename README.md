@@ -9,27 +9,13 @@ Written in [Pomsky](https://pomsky-lang.org).
 
 ## Support
 
-- [x] Hexadecimal
-  - [x] `#FFF` 3 length
-  - [x] `#FFFF` 4 length
-  - [x] `#FFFFFF` 6 length
-  - [x] `#FFFFFFFF` 8 length
-- [x] RGB / RGBA
-  - [x] `rgb()` and `rgba()` work the same
-  - [x] `rgb(255, 255, 255)`
-  - [x] `rgb(255 255 255)`
-  - [ ] `rgb(255 255, 255)`
-    - I'm not adding support for this one. I don't even know why it's valid.
-  - [x] `rgb(255, 255, 255, 1)`
-  - [x] `rgb(255 255 255 / 1)`
-  - [x] `rgb(100%, 100%, 100%, 100%)`
-- [ ] COLOR
-- [ ] HSL / HSLA
-- [ ] HWB
-- [ ] LAB
-- [ ] LCH
-- [ ] OKLAB
-- [ ] OKLCH
+- [x] [Hexadecimal](https://w3c.github.io/csswg-drafts/css-color/#hex-color)
+- [x] [RGB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-rgb) / [RGBA](https://w3c.github.io/csswg-drafts/css-color/#funcdef-rgba)
+- [ ] [COLOR](https://w3c.github.io/csswg-drafts/css-color/#funcdef-color)
+- [x] [HSL](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hsl) / [HSLA](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hsla)
+- [x] [HWB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hwb)
+- [x] [LAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lab) / [OKLAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklab)
+- [x] [LCH](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lch) / [OKLCH](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklch)
 
 ## Blocks Example
 
@@ -38,7 +24,7 @@ block={{"owner":"Kyza","repo":"blocks","id":"pomsky-viewer","type":"file"}}
 context={{"owner":"Kyza","repo":"color-regex","path":"full.pom","sha":"master","file":"README.md"}}
 height={500}
 />
-  
+
 ## Playground
 
 - [Pomsky](https://playground.pomsky-lang.org/?text=)
