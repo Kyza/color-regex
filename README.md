@@ -16,6 +16,9 @@ Written in [Pomsky](https://pomsky-lang.org).
 - [x] [HWB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hwb)
 - [x] [LAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lab) / [OKLAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklab)
 - [x] [LCH](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lch) / [OKLCH](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklch)
+- [x] [<named-color>](https://w3c.github.io/csswg-drafts/css-color/#named-colors)
+- [x] [<system-color>](https://w3c.github.io/csswg-drafts/css-color/#css-system-colors)
+- [x] [currentColor](https://w3c.github.io/csswg-drafts/css-color/#currentcolor-color)
 
 ## [Blocks Example](https://blocks.githubnext.com/Kyza/color-regex/blob/trunk/README.md)
 
