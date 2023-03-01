@@ -17,7 +17,7 @@ Written in [Pomsky](https://pomsky-lang.org).
 - [x] [LAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lab) / [OKLAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklab)
 - [x] [LCH](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lch) / [OKLCH](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklch)
 
-## Blocks Example
+## [Blocks Example](https://blocks.githubnext.com/Kyza/color-regex/blob/trunk/README.md)
 
 <BlockComponent
 block={{"owner":"Kyza","repo":"blocks","id":"pomsky-viewer","type":"file"}}
