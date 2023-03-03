@@ -35,7 +35,17 @@ height={500}
 
 ## Usage
 
-It always matches `{3,4}` unnamed groups. Those groups are the color type, then the color values. The rest will be undefined.
+It always matches 1, 3, or 4 unnamed groups.
+
+### 1
+
+This group will be the name of the color alias such as `red` or `papayawhip`.
+
+### 3 & 4
+
+These groups are the color type, then the color values.
+
+### Usage
 
 Just filter out the undefined values and you'll have an array of the values you want.
 
