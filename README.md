@@ -54,7 +54,8 @@ These groups are `"color"`, the color type, then the color values.
 Just filter out the undefined values and you'll have an array of the values you want.
 
 ```js
-"rgb(255, 255, 255)".match(regex).filter((item) => item != null)
+"rgb(255, 255, 255)".match(regex).filter((item, i) => i > 0 && item != null)
+"color(display-p3 1 1 1 / 1)".match(regex).filter((item, i) => i > 0 && item != null)
 ```
 
 ## Why?
