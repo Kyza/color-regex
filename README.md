@@ -4,14 +4,14 @@ Pattern matching and extracting color code formats using RegEx.
 
 Written in [Pomsky](https://pomsky-lang.org).
 
-- [Source](/full.pom)
-- [Compiled](/full.reg)
+- [Source](/index.pom)
+- [Compiled](/index.reg)
 
 ## Support
 
 - [x] [Hexadecimal](https://w3c.github.io/csswg-drafts/css-color/#hex-color)
 - [x] [RGB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-rgb) / [RGBA](https://w3c.github.io/csswg-drafts/css-color/#funcdef-rgba)
-- [ ] [COLOR](https://w3c.github.io/csswg-drafts/css-color/#funcdef-color)
+- [x] [COLOR](https://w3c.github.io/csswg-drafts/css-color/#funcdef-color)
 - [x] [HSL](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hsl) / [HSLA](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hsla)
 - [x] [HWB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-hwb)
 - [x] [LAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-lab) / [OKLAB](https://w3c.github.io/csswg-drafts/css-color/#funcdef-oklab)
@@ -35,15 +35,19 @@ height={500}
 
 ## Usage
 
-It always matches 1, 3, or 4 unnamed groups.
+It always matches 1, 3, 4, or 5 unnamed groups.
 
 ### 1
 
 This group will be the name of the color alias such as `red` or `papayawhip`.
 
-### 3 & 4
+### 3-5
 
 These groups are the color type, then the color values.
+
+OR
+
+These groups are `"color"`, the color type, then the color values.
 
 ### Usage
 

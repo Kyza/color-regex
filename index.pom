@@ -173,8 +173,8 @@ let slash_sep = [s]* (regex "\\/") [s]*;
     #       [ <percentage> | <number> | none]
     #       [ <percentage> | <number> | none]
     #       [ / [<alpha-value> | none] ]? )
-    # Percentages	Allowed for L, a and b
-    # Percent reference range 	for L: 0% = 0.0, 100% = 100.0
+    # Percentages: Allowed for L, a and b
+    # Percent reference range for L: 0% = 0.0, 100% = 100.0
     # for a and b: -100% = -125, 100% = 125
 
     let lab_lightness = percentage | zero_hundred_number;
@@ -196,8 +196,8 @@ let slash_sep = [s]* (regex "\\/") [s]*;
     #       [ <percentage> | <number> | none]
     #       [ <hue> | none]
     #       [ / [<alpha-value> | none] ]? )
-    # Percentages	Allowed for L and C
-    # Percent reference range 	for L: 0% = 0.0, 100% = 100.0
+    # Percentages: Allowed for L and C
+    # Percent reference range for L: 0% = 0.0, 100% = 100.0
     # for C: 0% = 0, 100% = 150
 
     let lch_lightness = percentage | zero_hundred_number;
@@ -207,7 +207,40 @@ let slash_sep = [s]* (regex "\\/") [s]*;
 
     :("lch" | "oklch") "(" (
       (
-      	[s]* :(lch_lightness) [s]+ :(lch_chroma) [s]+ :(lch_hue) [s]* ((slash_sep :(lch_alpha))? [s]*)?
+        [s]* :(lch_lightness) [s]+ :(lch_chroma) [s]+ :(lch_hue) [s]* ((slash_sep :(lch_alpha))? [s]*)?
+      )
+    ) ")"
+  )
+  |
+  (
+    # COLOR
+    # https://w3c.github.io/csswg-drafts/css-color/#funcdef-color
+    # color() = color( <colorspace-params> [ / [ <alpha-value> | none ] ]? )
+    # <colorspace-params> = [ <predefined-rgb-params> | <xyz-params>]
+    # <predefined-rgb-params> = <predefined-rgb> [ <number> | <percentage> | none ]{3}
+    # <predefined-rgb> = srgb | srgb-linear | display-p3 | a98-rgb | prophoto-rgb | rec2020
+    # <xyz-params> = <xyz-space> [ <number> | <percentage> | none ]{3}
+    # <xyz-space> = xyz | xyz-d50 | xyz-d65
+
+    # Commas are completely optional except for between the alpha where a slash is required.
+    # XYZ Space can be negative and above 100%.
+
+    let color_predefined_rgb = "srgb" | "srgb-linear" | "display-p3" | "a98-rgb" | "prophoto-rgb" | "rec2020";
+    let color_xyz_space = "xyz" | "xyz-d50" | "xyz-d65";
+
+    let color_sep = [s]+ | comma_sep;
+    let color_slash_sep = [s]+ slash_sep;
+
+    let color_predefined_rgb_number = zero_one_number | percentage;
+    let color_xyz_space_number = number "%"?;
+
+    :("color") "(" (
+      (
+        :(color_predefined_rgb) color_sep :(color_predefined_rgb_number) color_sep :(color_predefined_rgb_number) color_sep :(color_predefined_rgb_number) ((color_slash_sep :(alpha_number))? [s]*)?
+      )
+      |
+      (
+        :(color_xyz_space) color_sep :(color_xyz_space_number) color_sep :(color_xyz_space_number) color_sep :(color_xyz_space_number) ((color_slash_sep :(alpha_number))? [s]*)?
       )
     ) ")"
   )
