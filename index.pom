@@ -157,7 +157,6 @@ let slash_sep = [s]* (regex "\\/") [s]*;
     let hwb_whiteness = percentage;
     let hwb_blackness = percentage;
     let hwb_alpha = alpha_number;
-    let hsl_alpha = alpha_number;
 
     :("hwb") "(" (
       (
