@@ -33,6 +33,12 @@ height={500}
 - [Pomsky](https://playground.pomsky-lang.org/?text=)
 - [Regex101](https://regex101.com/r/nYVb24/)
 
+## Visualization
+
+From [https://regexper.com/](https://regexper.com/).
+
+![Railroad graph of the regex.](./color-regex.png)
+
 ## Usage
 
 It always matches 1, 3, 4, or 5 unnamed groups.
