@@ -31,7 +31,7 @@ height={500}
 ## Playground
 
 - [Pomsky](https://playground.pomsky-lang.org/?text=)
-- [Regex101](https://regex101.com/r/nYVb24/)
+- [Regex101](https://regex101.com/r/3HmoM7)
 
 ## Visualization
 
